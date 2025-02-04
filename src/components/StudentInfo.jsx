@@ -1,19 +1,7 @@
 
 const data = ["Name", "Age", "Email", "Role", "Github", "Parent Facebook", "Student Facebook", "Group", "Speed", "Github Last Update"];
 
-const StudentInfo = ({ setIsSelected, setIsInfo, selectedStudent, setCurUser }) => {
-    const [student, setStudent] = selectedStudent;
-
-    const handleDelete = () => {
-        console.log(student)
-        setCurUser(prev => {
-            const newStudentsList = prev.students.filter(curValue => curValue.id !== student.id);
-            return { ...prev, students: newStudentsList }
-        })
-        setStudent({});
-        setIsSelected(false);
-    }
-
+const StudentInfo = ({ setIsSelected, setIsInfo, student, setIsConfirmBox }) => {
 
     return (
         <div className="student-info">
@@ -113,7 +101,7 @@ const StudentInfo = ({ setIsSelected, setIsInfo, selectedStudent, setCurUser }) 
                 <p>Github Last Update</p>
                 <p>{student.lastUpdate}</p>
             </div>
-            <button className="delBtn" onClick={handleDelete}>Delete Student</button>
+            <button className="delBtn" onClick={() => setIsConfirmBox(true)}>Delete Student</button>
         </div>
     );
 }

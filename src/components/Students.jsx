@@ -1,17 +1,19 @@
 import { useState } from 'react';
 import StudentInfo from "./StudentInfo.jsx";
 import EditStudentInfo from './EditStudentInfo.jsx';
+import ConfirmationBox from './ConfirmationBox.jsx';
 import { useNavigate } from 'react-router-dom';
 
 const columns = ["Role", "Name", "Age", "Emai", "Student FB", "Last Update", "Github", "Speed", "Group", "LeaderId", "Parent FB"];
 
 const Students = ({ curUserList }) => {
-    const [curUser, setCurUser] = curUserList;
-    const [isSelected, setIsSelected] = useState(false); 
+    const [curUser, setCurUser] = curUserList; // app კომპონენტიდან წამოღებული curUser მდგომარეობის და მის set-ერ ფუნქციის დესტრუქცია
+    const [isSelected, setIsSelected] = useState(false); // არჩეულია არის თუ არა მოსწავლე, საჭიროა რომ გამოვიტანო მისი დეტალური ინფო
+    const [isConfirmBox, setIsConfirmBox] = useState(false); // გამოჩნდეს confirmbox-ი, მოსწავლის წაშლის ღილაკზე დაჭერისას
     const [student, setStudent] = useState({}); // სხვა კომპონენტვისთვის გადასაცემად(არჩეული მოსწავლის ობიექტი)
-    const [isInfo, setIsInfo] = useState(true);
-    const [searchStudent, setSearchStudent] = useState("");
-    const navigate = useNavigate();
+    const [isInfo, setIsInfo] = useState(true); // გამოაჩინოს StudetnInfo თუ EditStudentInfo
+    const [searchStudent, setSearchStudent] = useState(""); // მდგომარეობა სტუდენტების მოსაძებნად, იცვლება onChange-ზე
+    const navigate = useNavigate(); // ნავიგაცია /authorization path-ზე, logOut-ზე დაჭერისას
 
     const handleLogOut = () => {
         setCurUser({});
@@ -127,10 +129,14 @@ const Students = ({ curUserList }) => {
                 </section>
             </main>
             {    
-                isInfo ? isSelected && <StudentInfo setIsSelected={setIsSelected} setIsInfo={setIsInfo} selectedStudent={[student, setStudent]}
-                setCurUser={setCurUser} />:
+                isInfo ? isSelected && <StudentInfo setIsSelected={setIsSelected} setIsInfo={setIsInfo} student={student}
+                setIsConfirmBox={setIsConfirmBox} />:
                 isSelected && <EditStudentInfo setIsSelected={setIsSelected} setIsInfo={setIsInfo} selectedStudent={[student, setStudent]}
                 setCurUser={setCurUser} />
+            }
+            {
+                isConfirmBox && <ConfirmationBox setIsConfirmBox={setIsConfirmBox} setIsSelected={setIsSelected} setCurUser={setCurUser}
+                selectedStudent={[student, setStudent]} />
             }
         </div>
     );
