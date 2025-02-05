@@ -5,6 +5,7 @@ import ConfirmationBox from './ConfirmationBox.jsx';
 import { useNavigate } from 'react-router-dom';
 
 const columns = ["Role", "Name", "Age", "Emai", "Student FB", "Last Update", "Github", "Speed", "Group", "LeaderId", "Parent FB"];
+const searchBy = ["fullname", "role", "email", "age", "studentLink", "github", "speed", "group"];
 
 const Students = ({ curUserList }) => {
     const [curUser, setCurUser] = curUserList; // app კომპონენტიდან წამოღებული curUser მდგომარეობის და მის set-ერ ფუნქციის დესტრუქცია
@@ -13,11 +14,16 @@ const Students = ({ curUserList }) => {
     const [student, setStudent] = useState({}); // სხვა კომპონენტვისთვის გადასაცემად(არჩეული მოსწავლის ობიექტი)
     const [isInfo, setIsInfo] = useState(true); // გამოაჩინოს StudetnInfo თუ EditStudentInfo
     const [searchStudent, setSearchStudent] = useState(""); // მდგომარეობა სტუდენტების მოსაძებნად, იცვლება onChange-ზე
+    const [filterKey, setFilterKey] = useState("student"); // key, რომლითაც გავფილტრაც მოსწავლეების მასივს
     const navigate = useNavigate(); // ნავიგაცია /authorization path-ზე, logOut-ზე დაჭერისას
 
     const handleLogOut = () => {
         setCurUser({});
         navigate("/authorization");
+    }
+
+    const selectChange = ({ target }) => {
+        setFilterKey(target.value);
     }
 
     const handleSubmit = (e) => {
@@ -70,7 +76,16 @@ const Students = ({ curUserList }) => {
             </header>
             <div className="border-div"></div>
             <div className="inputs">
-                <input type="text" onChange={handleChange} name="fullname" maxLength="25" placeholder="student name..." />
+                <div id="search-div">
+                    <input type="text" onChange={handleChange} name="fullname" maxLength="25" placeholder="student name..." />
+                    <select name="role" className="select" onChange={selectChange} value={filterKey}>
+                        {
+                            searchBy.map((curValue, index) => {
+                                return <option key={index} value={curValue}>{curValue}</option>;
+                            })
+                        }
+                    </select>
+                </div>
                 <form onSubmit={handleSubmit}>
                     <input type="text" name="fullname" maxLength="25" placeholder="add student" required />
                     <button>Add Student</button>
@@ -93,7 +108,7 @@ const Students = ({ curUserList }) => {
                         <tbody>
                             {
                                 [...(searchStudent === "" ? curUser.students : 
-                                curUser.students.filter(curValue => curValue.fullname.slice(0, searchStudent.length).toLowerCase() === searchStudent))]
+                                curUser.students.filter(curValue => curValue[filterKey].slice(0, searchStudent.length).toLowerCase() === searchStudent))]
                                 .map((curValue, index) => {
                                     return (
                                         <tr key={index} className="student" onClick={() => handleClick(curValue)}>

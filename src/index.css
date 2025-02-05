@@ -17,6 +17,7 @@ body {
 }
 
 header {
+    margin-top: 5px;
     width: 80%;
     display: flex;
     justify-content: space-between;
@@ -78,7 +79,7 @@ header button {
     justify-content: space-between;
 }
 
-input {
+input, select {
     width: 250px;
     padding: 5px 5px 5px 10px;
     font-size: 12px;
@@ -497,4 +498,15 @@ img {
 
 #confirm-buttons button:hover {
     background-color: #858585;
+}
+
+/* search-div */
+
+#search-div {
+    display: flex;
+    gap: 20px;
+}
+
+#search-div select {
+    width: 100px;
 }
