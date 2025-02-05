@@ -4,7 +4,7 @@ import EditStudentInfo from './EditStudentInfo.jsx';
 import ConfirmationBox from './ConfirmationBox.jsx';
 import { useNavigate } from 'react-router-dom';
 
-const columns = ["Role", "Name", "Age", "Emai", "Student FB", "Last Update", "Github", "Speed", "Group", "LeaderId", "Parent FB"];
+const columns = ["Role", "Name", "Age", "Email", "Student FB", "Last Update", "Github", "Speed", "Group", "LeaderId", "Parent FB"];
 const searchBy = ["fullname", "role", "email", "age", "studentLink", "github", "speed", "group"];
 
 const Students = ({ curUserList }) => {
@@ -14,7 +14,7 @@ const Students = ({ curUserList }) => {
     const [student, setStudent] = useState({}); // სხვა კომპონენტვისთვის გადასაცემად(არჩეული მოსწავლის ობიექტი)
     const [isInfo, setIsInfo] = useState(true); // გამოაჩინოს StudetnInfo თუ EditStudentInfo
     const [searchStudent, setSearchStudent] = useState(""); // მდგომარეობა სტუდენტების მოსაძებნად, იცვლება onChange-ზე
-    const [filterKey, setFilterKey] = useState("student"); // key, რომლითაც გავფილტრაც მოსწავლეების მასივს
+    const [filterKey, setFilterKey] = useState("fullname"); // key, რომლითაც გავფილტრაც მოსწავლეების მასივს
     const navigate = useNavigate(); // ნავიგაცია /authorization path-ზე, logOut-ზე დაჭერისას
 
     const handleLogOut = () => {
@@ -108,7 +108,7 @@ const Students = ({ curUserList }) => {
                         <tbody>
                             {
                                 [...(searchStudent === "" ? curUser.students : 
-                                curUser.students.filter(curValue => curValue[filterKey].slice(0, searchStudent.length).toLowerCase() === searchStudent))]
+                                curUser.students.filter(curValue => String(curValue[filterKey]).slice(0, searchStudent.length).toLowerCase() === searchStudent))]
                                 .map((curValue, index) => {
                                     return (
                                         <tr key={index} className="student" onClick={() => handleClick(curValue)}>
